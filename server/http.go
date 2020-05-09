@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/gorilla/schema"
-	"github.com/mattermost/mattermost-plugin-zoom/server/zoom"
+	bluejeans "github.com/mattermost/mattermost-plugin-bluejeans/server/bluejeans"
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
 )
@@ -47,7 +47,7 @@ func (p *Plugin) handleWebhook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var webhook zoom.Webhook
+	var webhook bluejeans.Webhook
 	decoder := schema.NewDecoder()
 
 	// Try to decode to standard webhook
@@ -61,8 +61,8 @@ func (p *Plugin) handleWebhook(w http.ResponseWriter, r *http.Request) {
 	// TODO: handle recording webhook
 }
 
-func (p *Plugin) handleStandardWebhook(w http.ResponseWriter, r *http.Request, webhook *zoom.Webhook) {
-	if webhook.Status != zoom.WebhookStatusEnded {
+func (p *Plugin) handleStandardWebhook(w http.ResponseWriter, r *http.Request, webhook *bluejeans.Webhook) {
+	if webhook.Status != bluejeans.WebhookStatusEnded {
 		return
 	}
 
@@ -85,7 +85,7 @@ func (p *Plugin) handleStandardWebhook(w http.ResponseWriter, r *http.Request, w
 	}
 
 	post.Message = "Meeting has ended."
-	post.Props["meeting_status"] = zoom.WebhookStatusEnded
+	post.Props["meeting_status"] = bluejeans.WebhookStatusEnded
 
 	if _, appErr := p.API.UpdatePost(post); appErr != nil {
 		http.Error(w, appErr.Error(), appErr.StatusCode)
@@ -109,7 +109,7 @@ type startMeetingRequest struct {
 	MeetingID int    `json:"meeting_id"`
 }
 
-func (p *Plugin) postMeeting(creatorUsername string, meetingID int, channelID string, topic string) (*model.Post, *model.AppError) {
+func (p *Plugin) postMeeting(creatorUsername string, meetingID string, channelID string, topic string) (*model.Post, *model.AppError) {
 
 	meetingURL := p.getMeetingURL(meetingID)
 
@@ -117,11 +117,11 @@ func (p *Plugin) postMeeting(creatorUsername string, meetingID int, channelID st
 		UserId:    p.botUserID,
 		ChannelId: channelID,
 		Message:   fmt.Sprintf("Meeting started at %s.", meetingURL),
-		Type:      "custom_zoom",
+		Type:      "custom_bluejeans",
 		Props: map[string]interface{}{
 			"meeting_id":               meetingID,
 			"meeting_link":             meetingURL,
-			"meeting_status":           zoom.WebhookStatusStarted,
+			"meeting_status":           bluejeans.WebhookStatusStarted,
 			"meeting_personal":         true,
 			"meeting_topic":            topic,
 			"meeting_creator_username": creatorUsername,
@@ -172,12 +172,12 @@ func (p *Plugin) handleStartMeeting(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	ru, clientErr := p.zoomClient.GetUser(user.Email)
+	ru, clientErr := p.bluejeansClient.GetPersonalMeeting(user.Email)
 	if clientErr != nil {
 		http.Error(w, clientErr.Error(), clientErr.StatusCode)
 		return
 	}
-	meetingID := ru.Pmi
+	meetingID := ru.NumericMeetingID
 
 	createdPost, appErr := p.postMeeting(user.Username, meetingID, req.ChannelID, req.Topic)
 	if appErr != nil {
@@ -197,29 +197,29 @@ func (p *Plugin) handleStartMeeting(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (p *Plugin) getMeetingURL(meetingID int) string {
+func (p *Plugin) getMeetingURL(meetingID string) string {
 	config := p.getConfiguration()
-	zoomURL := strings.TrimSpace(config.ZoomURL)
-	if len(zoomURL) == 0 {
-		zoomURL = "https://zoom.us"
+	bluejeansURL := strings.TrimSpace(config.BluejeansURL)
+	if len(bluejeansURL) == 0 {
+		bluejeansURL = "https://bluejeans.com"
 	}
 
-	return fmt.Sprintf("%s/j/%v", zoomURL, meetingID)
+	return fmt.Sprintf("%s/%s", bluejeansURL, meetingID)
 }
 
-func (p *Plugin) postConfirm(meetingID int, channelID string, topic string, userID string, creatorName string) *model.Post {
+func (p *Plugin) postConfirm(meetingID string, channelID string, topic string, userID string, creatorName string) *model.Post {
 	meetingURL := p.getMeetingURL(meetingID)
 
 	post := &model.Post{
 		UserId:    p.botUserID,
 		ChannelId: channelID,
 		Message:   "There is another recent meeting created on this channel.",
-		Type:      "custom_zoom",
+		Type:      "custom_bluejeans",
 		Props: map[string]interface{}{
-			"type":                     "custom_zoom",
+			"type":                     "custom_bluejeans",
 			"meeting_id":               meetingID,
 			"meeting_link":             meetingURL,
-			"meeting_status":           zoom.RecentlyCreated,
+			"meeting_status":           bluejeans.RecentlyCreated,
 			"meeting_personal":         true,
 			"meeting_topic":            topic,
 			"meeting_creator_username": creatorName,
@@ -229,19 +229,19 @@ func (p *Plugin) postConfirm(meetingID int, channelID string, topic string, user
 	return p.API.SendEphemeralPost(userID, post)
 }
 
-func (p *Plugin) checkPreviousMessages(channelID string) (recentMeeting bool, meetindID int, creatorName string, err *model.AppError) {
-	var zoomMeetingTimeWindow int64 = 30 // 30 seconds
+func (p *Plugin) checkPreviousMessages(channelID string) (recentMeeting bool, meetindID string, creatorName string, err *model.AppError) {
+	var meetingTimeWindow int64 = 30 // 30 seconds
 
-	postList, appErr := p.API.GetPostsSince(channelID, (time.Now().Unix()-zoomMeetingTimeWindow)*1000)
+	postList, appErr := p.API.GetPostsSince(channelID, (time.Now().Unix()-meetingTimeWindow)*1000)
 	if appErr != nil {
-		return false, 0, "", appErr
+		return false, "", "", appErr
 	}
 
 	for _, post := range postList.ToSlice() {
 		if meetingID, ok := post.Props["meeting_id"]; ok {
-			return true, int(meetingID.(float64)), post.Props["meeting_creator_username"].(string), nil
+			return true, meetingID.(string), post.Props["meeting_creator_username"].(string), nil
 		}
 	}
 
-	return false, 0, "", nil
+	return false, "", "", nil
 }

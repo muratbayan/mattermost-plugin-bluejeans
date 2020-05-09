@@ -9,7 +9,7 @@ import {makeStyleFromTheme} from 'mattermost-redux/utils/theme_utils';
 import {Svgs} from '../../constants';
 import {formatDate} from '../../utils/date_utils';
 
-export default class PostTypeZoom extends React.PureComponent {
+export default class PostTypeBluejeans extends React.PureComponent {
     static propTypes = {
 
         /*
@@ -142,7 +142,7 @@ export default class PostTypeZoom extends React.PureComponent {
                 </div>
             );
         } else if (props.meeting_status === 'RECENTLY_CREATED') {
-            preText = `${this.props.creatorName} already created a zoom call recently`;
+            preText = `${this.props.creatorName} already created a bluejeans call recently`;
 
             subtitle = 'What do you want to do?';
             content = (
@@ -176,7 +176,7 @@ export default class PostTypeZoom extends React.PureComponent {
             );
         }
 
-        let title = 'Zoom Meeting';
+        let title = 'Bluejeans Meeting';
         if (props.meeting_topic) {
             title = props.meeting_topic;
         }

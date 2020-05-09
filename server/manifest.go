@@ -4,6 +4,6 @@ var manifest = struct {
 	Id      string
 	Version string
 }{
-	Id:      "zoom",
-	Version: "1.3.0",
+	Id:      "com.github.muratbayan.mattermost-plugin-bluejeans",
+	Version: "0.1.0",
 }

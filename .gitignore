@@ -14,7 +14,7 @@ dist
 # Build
 /coverage.txt
 /plugin.exe
-/mattermost-zoom-plugin*.tar.gz
+/mattermost-bluejeans-plugin*.tar.gz
 /dist
 server/vendor
 node_modules

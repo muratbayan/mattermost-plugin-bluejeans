@@ -9,14 +9,14 @@ import (
 )
 
 const (
-	COMMAND_HELP = `* |/zoom start| - Start a zoom meeting.`
+	COMMAND_HELP = `* |/bluejeans start| - Start a Bluejeans meeting.`
 )
 
 func getCommand() *model.Command {
 	return &model.Command{
-		Trigger:          "zoom",
-		DisplayName:      "Zoom",
-		Description:      "Integration with Zoom.",
+		Trigger:          "bluejeans",
+		DisplayName:      "Bluejeans",
+		Description:      "Integration with Bluejeans.",
 		AutoComplete:     true,
 		AutoCompleteDesc: "Available commands: start",
 		AutoCompleteHint: "[command]",
@@ -38,14 +38,14 @@ func (p *Plugin) executeCommand(c *plugin.Context, args *model.CommandArgs) (str
 	command := split[0]
 	action := ""
 
-	if command != "/zoom" {
-		return fmt.Sprintf("Command '%s' is not /zoom. Please try again.", command), nil
+	if command != "/bluejeans" {
+		return fmt.Sprintf("Command '%s' is not /bluejeans. Please try again.", command), nil
 	}
 
 	if len(split) > 1 {
 		action = split[1]
 	} else {
-		return "Please specify an action for /zoom command.", nil
+		return "Please specify an action for /bluejeans command.", nil
 	}
 
 	userID := args.UserId
@@ -69,12 +69,12 @@ func (p *Plugin) executeCommand(c *plugin.Context, args *model.CommandArgs) (str
 			return "", nil
 		}
 
-		// create a personal zoom meeting
-		ru, clientErr := p.zoomClient.GetUser(user.Email)
+		// create a personal bluejeans meeting
+		rpm, clientErr := p.bluejeansClient.GetPersonalMeeting(user.Email)
 		if clientErr != nil {
-			return "We could not verify your Mattermost account in Zoom. Please ensure that your Mattermost email address matches your Zoom login email address.", nil
+			return "We could not verify your Mattermost account in Bluejeans. Please ensure that your Mattermost email address matches your Bluejeans login email address.", nil
 		}
-		meetingID := ru.Pmi
+		meetingID := rpm.NumericMeetingID
 
 		_, appErr = p.postMeeting(user.Username, meetingID, args.ChannelId, "")
 		if appErr != nil {

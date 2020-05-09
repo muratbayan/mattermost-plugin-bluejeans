@@ -1,6 +1,3 @@
-// Copyright (c) 2017-present Mattermost, Inc. All Rights Reserved.
-// See License for license information.
-
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
@@ -9,7 +6,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 import {startMeeting} from '../../actions';
 
-import PostTypeZoom from './post_type_zoom.jsx';
+import PostTypeBluejeans from './post_type_bluejeans.jsx';
 
 function mapStateToProps(state, ownProps) {
     return {
@@ -28,4 +25,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostTypeZoom);
+export default connect(mapStateToProps, mapDispatchToProps)(PostTypeBluejeans);

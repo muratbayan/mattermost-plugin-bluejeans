@@ -14,18 +14,18 @@ export function startMeeting(channelId, force = false) {
                 window.open(meetingURL);
             }
         } catch (error) {
-            let m = 'We could not verify your Mattermost account in Zoom. Please ensure that your Mattermost email address matches your Zoom email address.';
+            let m = 'We could not verify your Mattermost account in Bluejeans. Please ensure that your Mattermost email address matches your Bluejeans email address.';
             if (error.message && error.message[0] === '{') {
                 const e = JSON.parse(error.message);
 
-                // Error is from Zoom API
+                // Error is from Bluejeans API
                 if (e && e.message) {
-                    m += '\nZoom error: ' + e.message;
+                    m += '\nBluejeans error: ' + e.message;
                 }
             }
 
             const post = {
-                id: 'zoomPlugin' + Date.now(),
+                id: 'bluejeansPlugin' + Date.now(),
                 create_at: Date.now(),
                 update_at: 0,
                 edit_at: 0,

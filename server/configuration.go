@@ -6,7 +6,7 @@ package main
 import (
 	"reflect"
 
-	"github.com/mattermost/mattermost-plugin-zoom/server/zoom"
+	bluejeans "github.com/mattermost/mattermost-plugin-bluejeans/server/bluejeans"
 	"github.com/pkg/errors"
 )
 
@@ -22,11 +22,11 @@ import (
 // If you add non-reference types to your configuration struct, be sure to rewrite Clone as a deep
 // copy appropriate for your types.
 type configuration struct {
-	ZoomURL       string
-	ZoomAPIURL    string
-	APIKey        string
-	APISecret     string
-	WebhookSecret string
+	BluejeansURL    string
+	BluejeansAPIURL string
+	APIKey          string
+	APISecret       string
+	WebhookSecret   string
 }
 
 // Clone shallow copies the configuration. Your implementation may require a deep copy if
@@ -103,7 +103,7 @@ func (p *Plugin) OnConfigurationChange() error {
 		return errors.Wrap(err, "failed to load plugin configuration")
 	}
 	p.setConfiguration(configuration)
-	p.zoomClient = zoom.NewClient(configuration.ZoomAPIURL, configuration.APIKey, configuration.APISecret)
+	p.bluejeansClient = bluejeans.NewClient(configuration.BluejeansAPIURL, configuration.APIKey, configuration.APISecret)
 
 	return nil
 }

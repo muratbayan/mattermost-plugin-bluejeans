@@ -1,8 +1,8 @@
 {
-  "name": "zoom",
-  "version": "1.0.7",
-  "description": "Zoom audio and video conferencing plugin for Mattermost",
-  "author": "Mattermost",
+  "name": "com.github.muratbayan.mattermost-plugin-bluejeans",
+  "version": "0.1.0",
+  "description": "Bluejeans audio and video conferencing plugin for Mattermost",
+  "author": "muratbayan",
   "license": "Apache-2.0",
   "main": "src/index.js",
   "scripts": {

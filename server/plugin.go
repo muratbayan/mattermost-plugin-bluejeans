@@ -1,6 +1,3 @@
-// Copyright (c) 2017-present Mattermost, Inc. All Rights Reserved.
-// See License for license information.
-
 package main
 
 import (
@@ -8,7 +5,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/mattermost/mattermost-plugin-zoom/server/zoom"
+	bluejeans "github.com/mattermost/mattermost-plugin-bluejeans/server/bluejeans"
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
 	"github.com/pkg/errors"
@@ -17,15 +14,15 @@ import (
 const (
 	postMeetingKey = "post_meeting_"
 
-	botUserName    = "zoom"
-	botDisplayName = "Zoom"
-	botDescription = "Created by the Zoom plugin."
+	botUserName    = "bluejeans"
+	botDisplayName = "Bluejeans"
+	botDescription = "Created by the Bluejeans plugin."
 )
 
 type Plugin struct {
 	plugin.MattermostPlugin
 
-	zoomClient *zoom.Client
+	bluejeansClient *bluejeans.Client
 
 	// botUserID of the created bot account.
 	botUserID string
@@ -73,7 +70,7 @@ func (p *Plugin) OnActivate() error {
 		return errors.Wrap(appErr, "couldn't set profile image")
 	}
 
-	p.zoomClient = zoom.NewClient(config.ZoomAPIURL, config.APIKey, config.APISecret)
+	p.bluejeansClient = bluejeans.NewClient(config.BluejeansAPIURL, config.APIKey, config.APISecret)
 
 	return nil
 }

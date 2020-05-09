@@ -1,2 +1,2 @@
-export const id = 'zoom';
-export const version = '1.3.0';
+export const id = 'com.github.muratbayan.mattermost-plugin-bluejeans';
+export const version = '0.1.0';
