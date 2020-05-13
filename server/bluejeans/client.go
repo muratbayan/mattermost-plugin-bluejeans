@@ -27,7 +27,7 @@ func (ce *ClientError) Error() string {
 	return ce.Err.Error()
 }
 
-// Client represents a Bluejeans API client
+// Client represents a BlueJeans API client
 type Client struct {
 	authData   AuthData
 	httpClient *http.Client
@@ -41,7 +41,7 @@ type AuthData struct {
 	ClientSecret string `json:"client_secret"`
 }
 
-// AuthResponse is the strut holding the response from the auth call for Bluejeans
+// AuthResponse is the strut holding the response from the auth call for BlueJeans
 type AuthResponse struct {
 	AccessToken string    `json:"access_token"`
 	ExpiresIn   int       `json:"expires_in"`
@@ -111,13 +111,12 @@ type PersonalMeeting struct {
 	InviteeJoinOption      int           `json:"inviteeJoinOption"`
 }
 
-// NewClient returns a new Bluejeans API client. Bluejeans does not have multiple URLs, using the https://api.bluejeans.com everywhere. There is one caveat on the base path of the personal meeting URL (mot api.bluejeans.com)
+// NewClient returns a new BlueJeans API client. BlueJeans does not have multiple URLs, using the https://api.bluejeans.com everywhere. There is one caveat on the base path of the personal meeting URL (api.bluejeans.com)
 func NewClient(bluejeansURL, apiKey, apiSecret string) *Client {
 	if bluejeansURL == "" {
 		bluejeansURL = (&url.URL{
 			Scheme: "https",
 			Host:   bluejeansAPIKey,
-			// Path:   "/" + bluejeansAPIVersion,
 		}).String()
 	}
 
@@ -135,7 +134,7 @@ func NewClient(bluejeansURL, apiKey, apiSecret string) *Client {
 	}
 }
 
-// GetPersonalMeeting queries the Bluejeans API and returns the PersonalMeeting object of the user
+// GetPersonalMeeting queries the BlueJeans API and returns the PersonalMeeting object of the user
 func (c *Client) GetPersonalMeeting(userID string) (*PersonalMeeting, *ClientError) {
 	fmt.Println("starting AUTH")
 

@@ -15,8 +15,8 @@ const (
 	postMeetingKey = "post_meeting_"
 
 	botUserName    = "bluejeans"
-	botDisplayName = "Bluejeans"
-	botDescription = "Created by the Bluejeans plugin."
+	botDisplayName = "BlueJeans"
+	botDescription = "Created by the BlueJeans plugin."
 )
 
 type Plugin struct {

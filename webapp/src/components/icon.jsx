@@ -13,7 +13,7 @@ export default class Icon extends React.PureComponent {
 
         return (
             <FormattedMessage
-                id='zoom.camera.ariaLabel'
+                id='bluejeans.camera.ariaLabel'
                 defaultMessage='camera icon'
             >
                 {(ariaLabel) => (

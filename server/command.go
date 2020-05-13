@@ -9,14 +9,14 @@ import (
 )
 
 const (
-	COMMAND_HELP = `* |/bluejeans start| - Start a Bluejeans meeting.`
+	COMMAND_HELP = `* |/bluejeans start| - Start a BlueJeans meeting.`
 )
 
 func getCommand() *model.Command {
 	return &model.Command{
 		Trigger:          "bluejeans",
-		DisplayName:      "Bluejeans",
-		Description:      "Integration with Bluejeans.",
+		DisplayName:      "BlueJeans",
+		Description:      "Integration with BlueJeans.",
 		AutoComplete:     true,
 		AutoCompleteDesc: "Available commands: start",
 		AutoCompleteHint: "[command]",
@@ -72,7 +72,7 @@ func (p *Plugin) executeCommand(c *plugin.Context, args *model.CommandArgs) (str
 		// create a personal bluejeans meeting
 		rpm, clientErr := p.bluejeansClient.GetPersonalMeeting(user.Email)
 		if clientErr != nil {
-			return "We could not verify your Mattermost account in Bluejeans. Please ensure that your Mattermost email address matches your Bluejeans login email address.", nil
+			return "We could not verify your Mattermost account in BlueJeans. Please ensure that your Mattermost email address matches your BlueJeans login email address.", nil
 		}
 		meetingID := rpm.NumericMeetingID
 
@@ -85,6 +85,7 @@ func (p *Plugin) executeCommand(c *plugin.Context, args *model.CommandArgs) (str
 	return fmt.Sprintf("Unknown action %v", action), nil
 }
 
+// ExecuteCommand method
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	msg, err := p.executeCommand(c, args)
 	if err != nil {

@@ -142,7 +142,7 @@ export default class PostTypeBluejeans extends React.PureComponent {
                 </div>
             );
         } else if (props.meeting_status === 'RECENTLY_CREATED') {
-            preText = `${this.props.creatorName} already created a bluejeans call recently`;
+            preText = `${this.props.creatorName} already created a BlueJeans call recently`;
 
             subtitle = 'What do you want to do?';
             content = (
@@ -176,7 +176,7 @@ export default class PostTypeBluejeans extends React.PureComponent {
             );
         }
 
-        let title = 'Bluejeans Meeting';
+        let title = 'BlueJeans Meeting';
         if (props.meeting_topic) {
             title = props.meeting_topic;
         }

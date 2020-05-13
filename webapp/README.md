@@ -1,4 +1,4 @@
-# README for Bluejeans
+# README for BlueJeans
 
 Add README information for the webapp portion of your plugin here.
 

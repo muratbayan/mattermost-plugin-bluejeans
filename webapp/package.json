@@ -1,7 +1,7 @@
 {
   "name": "com.github.muratbayan.mattermost-plugin-bluejeans",
-  "version": "0.1.0",
-  "description": "Bluejeans audio and video conferencing plugin for Mattermost",
+  "version": "0.1.1",
+  "description": "BlueJeans audio and video conferencing plugin for Mattermost",
   "author": "muratbayan",
   "license": "Apache-2.0",
   "main": "src/index.js",

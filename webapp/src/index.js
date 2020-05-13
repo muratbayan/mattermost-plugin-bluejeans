@@ -14,7 +14,7 @@ class Plugin {
             (channel) => {
                 startMeeting(channel.id)(store.dispatch, store.getState);
             },
-            'Start Bluejeans Meeting'
+            'Start BlueJeans Meeting'
         );
         registry.registerPostTypeComponent('custom_bluejeans', PostTypeBluejeans);
     }

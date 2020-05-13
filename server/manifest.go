@@ -5,5 +5,5 @@ var manifest = struct {
 	Version string
 }{
 	Id:      "com.github.muratbayan.mattermost-plugin-bluejeans",
-	Version: "0.1.0",
+	Version: "0.1.1",
 }
