@@ -7,8 +7,6 @@ Usage
 
 Once enabled, clicking the video icon in a Mattermost channel invites team members to join a BlueJeans call, hosted using the credentials of the user who initiated the call.
 
-![Screenshot](https://user-images.githubusercontent.com/177788/42196048-af54d2b8-7e30-11e8-80a0-5e160ae06f03.png)
-
 BlueJeans Setup Guide
 -----
 
