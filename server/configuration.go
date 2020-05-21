@@ -26,7 +26,6 @@ type configuration struct {
 	BluejeansAPIURL string
 	APIKey          string
 	APISecret       string
-	WebhookSecret   string
 }
 
 // Clone shallow copies the configuration. Your implementation may require a deep copy if
@@ -44,10 +43,6 @@ func (c *configuration) IsValid() error {
 
 	if len(c.APISecret) == 0 {
 		return errors.New("APISecret is not configured")
-	}
-
-	if len(c.WebhookSecret) == 0 {
-		return errors.New("WebhookSecret is not configured")
 	}
 
 	return nil

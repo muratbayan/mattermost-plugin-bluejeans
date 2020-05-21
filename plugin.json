@@ -4,7 +4,7 @@
     "description": "BlueJeans audio and video conferencing plugin for Mattermost",
     "homepage_url": "https://github.com/muratbayan/mattermost-plugin-bluejeans",
     "support_url": "https://github.com/muratbayan/mattermost-plugin-bluejeans/issues",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "min_server_version": "5.12.0",
     "server": {
         "executables": {

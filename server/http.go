@@ -4,7 +4,6 @@
 package main
 
 import (
-	"crypto/subtle"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -35,12 +34,12 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 }
 
 func (p *Plugin) handleWebhook(w http.ResponseWriter, r *http.Request) {
-	config := p.getConfiguration()
+	// config := p.getConfiguration()
 
-	if subtle.ConstantTimeCompare([]byte(r.URL.Query().Get("secret")), []byte(config.WebhookSecret)) != 1 {
-		http.Error(w, "Not authorized", http.StatusUnauthorized)
-		return
-	}
+	// if subtle.ConstantTimeCompare([]byte(r.URL.Query().Get("secret")), []byte(config.WebhookSecret)) != 1 {
+	// 	http.Error(w, "Not authorized", http.StatusUnauthorized)
+	// 	return
+	// }
 
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Bad request body", http.StatusBadRequest)
